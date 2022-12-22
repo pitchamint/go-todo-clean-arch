@@ -23,5 +23,5 @@ func main() {
 	//setup routes
 	r := routes.SetupRouter()
 	// running
-	r.Run(":8080")
+	r.Listen(":3000")
 }

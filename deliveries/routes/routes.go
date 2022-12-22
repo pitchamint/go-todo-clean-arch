@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 	"github.com/krittawatcode/go-todo-clean-arch/databases"
 	"github.com/krittawatcode/go-todo-clean-arch/deliveries"
 	"github.com/krittawatcode/go-todo-clean-arch/repositories"
@@ -9,20 +9,21 @@ import (
 )
 
 // SetupRouter ...
-func SetupRouter() *gin.Engine {
+func SetupRouter() *fiber.App {
 
 	todoRepo := repositories.NewToDoRepository(databases.DB)
 	todoUseCase := usecases.NewToDoUseCase(todoRepo)
 	todoHandler := deliveries.NewToDoHandler(todoUseCase)
 
-	r := gin.Default()
-	v1 := r.Group("/v1")
+	// r := gin.Default()
+	app := fiber.New()
+	v1 := app.Group("/v1")
 	{
-		v1.GET("todo", todoHandler.GetAllTodo)
-		v1.POST("todo", todoHandler.CreateATodo)
-		v1.GET("todo/:id", todoHandler.GetATodo)
-		v1.PUT("todo/:id", todoHandler.UpdateATodo)
-		v1.DELETE("todo/:id", todoHandler.DeleteATodo)
+		v1.Get("todo", todoHandler.GetAllTodo)
+		v1.Post("todo", todoHandler.CreateATodo)
+		v1.Get("todo/:id", todoHandler.GetATodo)
+		v1.Put("todo/:id", todoHandler.UpdateATodo)
+		v1.Delete("todo/:id", todoHandler.DeleteATodo)
 	}
-	return r
+	return app
 }

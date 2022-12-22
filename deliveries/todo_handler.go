@@ -3,7 +3,8 @@ package deliveries
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
+
 	"github.com/krittawatcode/go-todo-clean-arch/domains"
 	"github.com/krittawatcode/go-todo-clean-arch/models"
 )
@@ -21,64 +22,65 @@ func NewToDoHandler(usecase domains.ToDoUseCase) *ToDoHandler {
 }
 
 // GetAllTodo ...
-func (t *ToDoHandler) GetAllTodo(c *gin.Context) {
+func (t *ToDoHandler) GetAllTodo(c *fiber.Ctx) error {
 	resp, err := t.todoUseCase.GetAllTodo()
 	if err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		return c.SendStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, resp)
+		return c.Status(200).JSON(resp)
 	}
 }
 
 // CreateATodo ...
-func (t *ToDoHandler) CreateATodo(c *gin.Context) {
+func (t *ToDoHandler) CreateATodo(c *fiber.Ctx) error {
 	var newToDo models.Todo
-	if err := c.ShouldBind(&newToDo); err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
+	if err := c.BodyParser(&newToDo); err != nil {
+		return c.SendStatus(http.StatusBadRequest)
 	}
 	err := t.todoUseCase.CreateATodo(&newToDo)
 	if err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		return c.SendStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, newToDo)
+		return c.Status(200).JSON(newToDo)
 	}
 }
 
 // GetATodo ...
-func (t *ToDoHandler) GetATodo(c *gin.Context) {
+func (t *ToDoHandler) GetATodo(c *fiber.Ctx) error {
 	var newToDo models.Todo
-	id := c.Params.ByName("id")
+	id := c.Params("id")
 	err := t.todoUseCase.GetATodo(&newToDo, id)
 	if err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		return c.SendStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, newToDo)
+		return c.Status(200).JSON(newToDo)
+
 	}
 }
 
 // UpdateATodo ...
-func (t *ToDoHandler) UpdateATodo(c *gin.Context) {
-	id := c.Params.ByName("id")
+func (t *ToDoHandler) UpdateATodo(c *fiber.Ctx) error {
+	id := c.Params("id")
 	var reqToDo models.Todo
-	if err := c.ShouldBind(&reqToDo); err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
+	if err := c.BodyParser(&reqToDo); err != nil {
+		return c.SendStatus(http.StatusBadRequest)
 	}
 	err := t.todoUseCase.UpdateATodo(&reqToDo, id)
 	if err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		return c.SendStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, reqToDo)
+		return c.Status(200).JSON(reqToDo)
 	}
 }
 
 // DeleteATodo ...
-func (t *ToDoHandler) DeleteATodo(c *gin.Context) {
-	id := c.Params.ByName("id")
+func (t *ToDoHandler) DeleteATodo(c *fiber.Ctx) error {
+	id := c.Params("id")
 	var respToDo models.Todo
 	err := t.todoUseCase.DeleteATodo(&respToDo, id)
 	if err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		return c.SendStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, gin.H{"id:" + id: "deleted"})
+		return c.Status(200).JSON(map[string]string{"id" + id: "deleted"})
 	}
 }
