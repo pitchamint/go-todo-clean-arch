@@ -17,7 +17,8 @@ func SetupRouter() *fiber.App {
 
 	// r := gin.Default()
 	app := fiber.New()
-	v1 := app.Group("/v1")
+	api := app.Group("api")
+	v1 := api.Group("/v1")
 	{
 		v1.Get("todo", todoHandler.GetAllTodo)
 		v1.Post("todo", todoHandler.CreateATodo)
