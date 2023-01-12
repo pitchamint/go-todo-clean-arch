@@ -1,5 +1,5 @@
 package domains
-
+//pod ใช้ต่อ adapter
 import (
 	"github.com/krittawatcode/go-todo-clean-arch/models"
 )
@@ -11,13 +11,17 @@ type ToDoUseCase interface {
 	GetATodo(t *models.Todo, id string) (err error)
 	UpdateATodo(t *models.Todo, id string) (err error)
 	DeleteATodo(t *models.Todo, id string) (err error)
+	CreateUserTodo(t *models.LoginUser) (err error)
+	LoginTodo(t *models.Login) (err error)
 }
 
-// ToDoRepository ...
+// ToDoRepository ... กำหนดว่าส่งค่าอะไรมา
 type ToDoRepository interface {
 	GetAllTodo(t *[]models.Todo) (err error)
 	CreateATodo(t *models.Todo) (err error)
 	GetATodo(t *models.Todo, id string) (err error)
 	UpdateATodo(t *models.Todo, id string) (err error)
 	DeleteATodo(t *models.Todo, id string) (err error)
+	CreateUserTodo(t *models.LoginUser) (err error)
+	LoginTodo(t *models.Login) (err error)
 }

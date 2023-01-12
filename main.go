@@ -12,6 +12,7 @@ import (
 
 var err error
 
+// ToDoHandler domain usecase respose
 func main() {
 	databases.DB, err = gorm.Open("mysql", databases.DbURL(databases.BuildDBConfig()))
 	if err != nil {
@@ -20,8 +21,9 @@ func main() {
 	defer databases.DB.Close()
 	// run the migrations: todo struct
 	databases.DB.AutoMigrate(&models.Todo{})
+	databases.DB.AutoMigrate(&models.LoginUser{})
 	//setup routes
 	r := routes.SetupRouter()
 	// running
-	r.Listen(":3000")
+	r.Listen(":8080")
 }

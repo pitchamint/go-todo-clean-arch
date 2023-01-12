@@ -1,6 +1,8 @@
 package usecases
 
 import (
+
+
 	"github.com/krittawatcode/go-todo-clean-arch/domains"
 	"github.com/krittawatcode/go-todo-clean-arch/models"
 )
@@ -10,6 +12,7 @@ type todoUseCase struct {
 	todoRepo domains.ToDoRepository
 }
 
+// ส่วนของ service
 // NewToDoUseCase ...
 func NewToDoUseCase(repo domains.ToDoRepository) domains.ToDoUseCase {
 	return &todoUseCase{
@@ -47,5 +50,14 @@ func (t *todoUseCase) UpdateATodo(input *models.Todo, id string) (err error) {
 
 func (t *todoUseCase) DeleteATodo(input *models.Todo, id string) (err error) {
 	handleErr := t.todoRepo.DeleteATodo(input, id)
+	return handleErr
+}
+
+func (t *todoUseCase) CreateUserTodo(user *models.LoginUser) (err error) {
+	handleErr := t.todoRepo.CreateUserTodo(user)
+	return handleErr
+}
+func (t *todoUseCase) LoginTodo(value *models.Login) (err error) {
+	handleErr := t.todoRepo.LoginTodo(value)
 	return handleErr
 }

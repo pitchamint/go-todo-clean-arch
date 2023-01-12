@@ -2,7 +2,6 @@ package databases
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/jinzhu/gorm"
 )
@@ -12,21 +11,21 @@ var DB *gorm.DB
 
 // DBConfig represents db configuration
 type DBConfig struct {
-	Host     string
-	Port     int
-	User     string
-	DBName   string
-	Password string
+	Host   string
+	Port   string
+	User   string
+	DBName string
+	// Password string
 }
 
 // BuildDBConfig use for building DB config
 func BuildDBConfig() *DBConfig {
 	dbConfig := DBConfig{
-		Host:     "0.0.0.0",
-		Port:     3306,
-		User:     "root",
-		DBName:   "todo",
-		Password: os.Getenv("DB_PASSWORD"),
+		Host:   "127.0.0.1",
+		Port:   "23306",
+		User:   "root",
+		DBName: "golang_test",
+		// Password: "password",
 	}
 	return &dbConfig
 }
@@ -34,9 +33,9 @@ func BuildDBConfig() *DBConfig {
 // DbURL use for create DB connection URL
 func DbURL(dbConfig *DBConfig) string {
 	return fmt.Sprintf(
-		"%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
+		"%s:@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		dbConfig.User,
-		dbConfig.Password,
+		// dbConfig.Password,
 		dbConfig.Host,
 		dbConfig.Port,
 		dbConfig.DBName,
